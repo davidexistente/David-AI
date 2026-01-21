@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>David AI (beta) - Final</title>
+    <style>
+        :root {
+            --bg-page: #0A1929;
+            --bg-chat: #102A43;
+            --header-color: #001E3C;
+            --azul-brillante: #3399FF;
+            --ia-bubble: #1E3A5F;
+            --user-bubble: #0059B2;
+            --texto-blanco: #E3F2FD;
+        }
+
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-page); color: var(--texto-blanco); margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+
+        #auth-screen { background: var(--bg-chat); padding: 50px; border-radius: 30px; text-align: center; border: 2px solid var(--azul-brillante); width: 400px; }
+        
+        #chat-screen { display: none; width: 98vw; height: 96vh; background: var(--bg-chat); flex-direction: column; border: 3px solid var(--azul-brillante); border-radius: 20px; }
+
+        /* AQUÍ ESTÁ EL HEADER */
+        .header {
+            background: var(--header-color);
+            padding: 20px;
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between; /* Para que el botón se vaya a la derecha */
+            border-bottom: 2px solid var(--azul-brillante);
+        }
+
+        .btn-limpiar {
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .mensajes { flex: 1; padding: 30px; overflow-y: auto; display: flex; flex-direction: column; gap: 25px; }
+
+        .burbuja { max-width: 80%; padding: 25px; border-radius: 25px; font-size: 1.4rem; line-height: 1.4; }
+        .yo { align-self: flex-end; background: var(--user-bubble); color: white; border-bottom-right-radius: 4px; }
+        .david { align-self: flex-start; background: var(--ia-bubble); color: var(--texto-blanco); border-bottom-left-radius: 4px; border-left: 5px solid var(--azul-brillante); }
+
+        .input-area { padding: 25px; display: flex; gap: 15px; background: var(--header-color); }
+        #user-input { flex: 1; padding: 20px; font-size: 1.3rem; border-radius: 40px; border: 2px solid var(--azul-brillante); background: #0A1929; color: white; outline: none; }
+        .btn-enviar { background: var(--azul-brillante); color: white; border: none; padding: 0 40px; border-radius: 40px; cursor: pointer; font-size: 1.2rem; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div id="auth-screen">
+        <div style="font-size: 80px;">🚙</div>
+        <h1>David AI</h1>
+        <input type="email" id="email" style="width:100%; padding:15px; margin:20px 0; border-radius:10px;" placeholder="Tu correo...">
+        <button class="btn-enviar" style="height: 60px; width: 100%;" onclick="entrar()">ENTRAR</button>
+    </div>
+
+    <div id="chat-screen">
+        <div class="header">
+            <div>🚙 David AI (beta)</div>
+            <button class="btn-limpiar" onclick="limpiarChat()">Limpiar Chat</button>
+        </div>
+        <div class="mensajes" id="chat-box">
+            <div class="burbuja david">Hola! Soy un proyecto de ia de David pero intenta preguntarme algo :)?</div>
+        </div>
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="Escribe aquí..." onkeypress="if(event.key==='Enter') enviar()">
+            <button class="btn-enviar" onclick="enviar()">ENVIAR</button>
+        </div>
+    </div>
+
+<script>
+    function entrar() {
+        if(document.getElementById('email').value.includes('@')) {
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('chat-screen').style.display = 'flex';
+        }
+    }
+
+    function limpiarChat() {
+        document.getElementById('chat-box').innerHTML = '<div class="burbuja david">Chat limpiado. ¿En qué más puedo ayudarte?</div>';
+    }
+
+    function enviar() {
+        const input = document.getElementById('user-input');
+        const box = document.getElementById('chat-box');
+        const txt = input.value.trim();
+        if(!txt) return;
+
+        const uDiv = document.createElement('div');
+        uDiv.className = 'burbuja yo';
+        uDiv.innerText = txt;
+        box.appendChild(uDiv);
+
+        let r = "La verdad como soy una ia en desarrollo y solo soy un archivo local no te entiendo pero nada, xd";
+        const p = txt.toLowerCase();
+
+        if (p.includes("hola")) r = "¡Hola! Soy David AI 🚙. ¿Cómo va tu día?";
+        if (p.includes("error") || p.includes("no funciona")) r = "Por el momento no tengo servidores de inteligencia artificial como gemini, y soy solo un archivo local";
+        if (p.includes("consejo")) r = "El éxito es la suma de pequeños esfuerzos repetidos día tras día.";
+
+        setTimeout(() => {
+            const aDiv = document.createElement('div');
+            aDiv.className = 'burbuja david';
+            aDiv.innerText = r;
+            box.appendChild(aDiv);
+            box.scrollTop = box.scrollHeight;
+        }, 600);
+        input.value = "";
+    }
+</script>
+</body>
+</html>
